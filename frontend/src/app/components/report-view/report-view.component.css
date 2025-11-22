@@ -1,0 +1,17 @@
+.card-title {
+    color: #111827;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.card-text {
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.alert-info {
+    background-color: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1e40af;
+    border-radius: 8px;
+}

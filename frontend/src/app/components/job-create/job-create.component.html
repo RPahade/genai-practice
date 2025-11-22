@@ -1,0 +1,42 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="glass-card p-5">
+                <h2 class="mb-4">Start New Research</h2>
+                <form [formGroup]="jobForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group mb-4">
+                        <label for="topic" class="form-label text-muted mb-2">Research Topic</label>
+                        <input type="text" formControlName="topic" class="form-control form-control-lg"
+                            placeholder="e.g., The Future of Quantum Computing"
+                            [ngClass]="{ 'is-invalid': submitted && f['topic'].errors }" />
+                        <div *ngIf="submitted && f['topic'].errors" class="invalid-feedback">
+                            <div *ngIf="f['topic'].errors['required']">Topic is required</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-5">
+                        <label for="file" class="form-label text-muted mb-2">Upload PDF Context (Optional)</label>
+                        <div class="input-group">
+                            <input type="file" class="form-control" (change)="onFileChange($event)" accept=".pdf"
+                                id="fileInput" />
+                            <label class="input-group-text bg-transparent text-muted border-start-0" for="fileInput">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </label>
+                        </div>
+                        <small class="text-muted mt-2 d-block">Upload a PDF document to provide specific context for the
+                            research agent.</small>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a routerLink="/" class="text-muted text-decoration-none">Cancel</a>
+                        <button [disabled]="loading" class="btn btn-primary btn-lg px-5">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                            Start Research
+                        </button>
+                    </div>
+                    <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

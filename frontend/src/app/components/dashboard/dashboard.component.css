@@ -1,0 +1,40 @@
+.list-group-item {
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 20px;
+    transition: background-color 0.2s;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+.list-group-item:hover {
+    background-color: #f9fafb;
+}
+
+.badge {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.badge-warning {
+    background-color: #fffbeb;
+    color: #b45309;
+}
+
+.badge-primary {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+}
+
+.badge-success {
+    background-color: #ecfdf5;
+    color: #047857;
+}
+
+.badge-danger {
+    background-color: #fef2f2;
+    color: #b91c1c;
+}

@@ -1,0 +1,39 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="glass-card p-5">
+                <h2 class="text-center mb-4">Welcome Back</h2>
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group mb-3">
+                        <label for="email" class="form-label text-muted">Email</label>
+                        <input type="email" formControlName="email" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
+                        <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+                            <div *ngIf="f['email'].errors['required']">Email is required</div>
+                            <div *ngIf="f['email'].errors['email']">Email must be a valid email address</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="password" class="form-label text-muted">Password</label>
+                        <input type="password" formControlName="password" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" />
+                        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+                            <div *ngIf="f['password'].errors['required']">Password is required</div>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button [disabled]="loading" class="btn btn-primary btn-lg">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                            Login
+                        </button>
+                    </div>
+                    <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+                    <div class="text-center mt-4">
+                        <p class="text-muted">Don't have an account? <a (click)="navigateToRegister()"
+                                class="text-primary" style="cursor: pointer;">Register</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

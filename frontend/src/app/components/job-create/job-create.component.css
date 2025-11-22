@@ -1,0 +1,11 @@
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 20px;
+    font-size: 1.25rem;
+    text-align: center;
+}
+
+.card-body {
+    padding: 30px;
+}
