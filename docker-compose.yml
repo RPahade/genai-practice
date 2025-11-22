@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/research_platform
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SECRET_KEY=supersecretkey
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      # Add your API keys below to enable real LLM integration (see API_KEYS_SETUP.md)
+      # - OPENAI_API_KEY=sk-your-openai-key-here
+      # - TAVILY_API_KEY=tvly-your-tavily-key-here
+    depends_on:
+      db:
+        condition: service_started
+      kafka:
+        condition: service_started
+    networks:
+      - research_net
+
+  frontend:
+    image: node:18-alpine
+    container_name: frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm install && npm start -- --host 0.0.0.0"
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+    networks:
+      - research_net
+
+  db:
+    image: postgres:15
+    container_name: db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=research_platform
+    ports:
+      - "5432:5432"
+    networks:
+      - research_net
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "22181:2181"
+    networks:
+      - research_net
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - research_net
+
+volumes:
+  postgres_data:
+
+
+networks:
+  research_net:
+    driver: bridge
